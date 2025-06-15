@@ -137,9 +137,9 @@ BEGIN
 		PRINT '-------------------------------------------------------';
 
 		SET @start_time = GETDATE();
-		PRINT '>> Truncating table silver.erp_cust_az12'
+		PRINT '>> Truncating table silver.erp_cust_az12';
 		TRUNCATE TABLE silver.erp_cust_az12;
-		PRINT '>> Inserting Data Into silver.erp_cust_az12'
+		PRINT '>> Inserting Data Into silver.erp_cust_az12';
 		INSERT INTO silver.erp_cust_az12 (
 			cid,
 			bdate,
@@ -165,9 +165,9 @@ BEGIN
 		PRINT '----------';
 
 		SET @start_time = GETDATE();
-		PRINT '>> Truncating table silver.erp_loc_a101'
+		PRINT '>> Truncating table silver.erp_loc_a101';
 		TRUNCATE TABLE silver.erp_loc_a101;
-		PRINT '>> Inserting Data Into silver.erp_loc_a101'
+		PRINT '>> Inserting Data Into silver.erp_loc_a101';
 		INSERT INTO silver.erp_loc_a101 (cid, cntry)
 		SELECT
 			REPLACE(cid, '-', '') AS cid, -- Removed extra - on customer IDs
@@ -183,9 +183,9 @@ BEGIN
 		PRINT '----------';
 
 		SET @start_time = GETDATE();
-		PRINT '>> Truncating table silver.erp_px_cat_g1v2'
+		PRINT '>> Truncating table silver.erp_px_cat_g1v2';
 		TRUNCATE TABLE silver.erp_px_cat_g1v2;
-		PRINT '>> Inserting Data Into silver.erp_px_cat_g1v2'
+		PRINT '>> Inserting Data Into silver.erp_px_cat_g1v2';
 		INSERT INTO silver.erp_px_cat_g1v2 (
 			ID,
 			CAT,
@@ -201,13 +201,19 @@ BEGIN
 		SET @end_time = GETDATE();
 		PRINT '>> Load Duration: ' + CAST(DATEDIFF(second, @start_time, @end_time) AS NVARCHAR) + ' seconds';
 		PRINT '----------';
+
+		SET @total_end_time = GETDATE();
+		PRINT '====================================================';
+		PRINT 'Loading Silver Layer Completed';
+		PRINT '>> Total Silver Layer Load Duration: ' + CAST(DATEDIFF(second, @total_start_time, @total_end_time) AS NVARCHAR) + ' seconds';
+		PRINT '====================================================';
 	END TRY
 	BEGIN CATCH
-		PRINT '===================================================='
-		PRINT 'ERROR OCCURED DURING LOADING BRONZE LAYER'
-		PRINT 'Error Message' + ERROR_MESSAGE()
+		PRINT '====================================================';
+		PRINT 'ERROR OCCURED DURING LOADING BRONZE LAYER';
+		PRINT 'Error Message' + ERROR_MESSAGE();
 		PRINT 'Error Message' + CAST (ERROR_NUMBER() AS NVARCHAR);
 		PRINT 'Error Message' + CAST (ERROR_STATE() AS NVARCHAR);
-		PRINT '===================================================='
+		PRINT '====================================================';
 	END CATCH
 END
